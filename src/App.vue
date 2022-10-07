@@ -1,5 +1,6 @@
 <template>
   <h1>Peek-a-Vue</h1>
+	<button @click="newGame">New Game</button>
   <section class="game-board">
     <SingleCard
     v-for="(card, index) in cardList"
@@ -39,14 +40,23 @@ export default {
 			return remainingCards / 2
 		})
 
-    for (let i = 0; i < 16; i++) {
-      cardList.value.push({
-				value: 8,
-				visible: false,
-				position: i,
-				matched: false
-			})
-    }
+		let defaultFaceValues = [1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8]
+
+		const newGame = () => {
+			cardList.value = ([])
+			let currentFaceValues = [...defaultFaceValues]
+			for (let i = 0; i < 16; i++) {
+				let faceValueOfCard = currentFaceValues[Math.floor(Math.random()*currentFaceValues.length)]
+				let index = currentFaceValues.indexOf(faceValueOfCard)
+				currentFaceValues.splice(index, 1)
+				cardList.value.push({
+					value: faceValueOfCard,
+					visible: false,
+					position: i,
+					matched: false
+				})
+			}
+		}
 
 		const flipCard = (payload) => {
 			cardList.value[payload.position].visible = true
@@ -66,11 +76,9 @@ export default {
 					const cardTwo = currentValue[1]
 
 					if (cardOne.faceValue === cardTwo.faceValue) {
-						status.value = 'Matched!'
 						cardList.value[cardOne.position].matched = true
 						cardList.value[cardTwo.position].matched = true
 					} else {
-						status.value = 'Mismatch!'
 						cardList.value[cardOne.position].visible = false
 						cardList.value[cardTwo.position].visible = false
 					}
@@ -87,6 +95,7 @@ export default {
 			flipCard,
 			userSelection,
 			status,
+			newGame
     }
   }
 }
