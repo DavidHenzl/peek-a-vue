@@ -68,6 +68,9 @@ export default {
 			cardList.value[payload.position].visible = true
 
 			if (userSelection.value[0]) {
+				if (userSelection.value[0].position === payload.position) {
+					return
+				}
 				userSelection.value[1] = payload
 			} else {
 				userSelection.value[0] = payload
@@ -90,7 +93,7 @@ export default {
 						setTimeout(() => {
 							cardList.value[cardOne.position].visible = false
 							cardList.value[cardTwo.position].visible = false
-						}, 2000)
+						}, 1000)
 					}
 
 
