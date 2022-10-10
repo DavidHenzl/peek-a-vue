@@ -31,7 +31,7 @@ export default {
 		onMounted(() => {
 			newGame()
 		})
-		
+
 		const status = computed(() => {
 			if (remainingPairs.value === 0) {
 				return 'Player wins!'
@@ -87,8 +87,10 @@ export default {
 						cardList.value[cardOne.position].matched = true
 						cardList.value[cardTwo.position].matched = true
 					} else {
-						cardList.value[cardOne.position].visible = false
-						cardList.value[cardTwo.position].visible = false
+						setTimeout(() => {
+							cardList.value[cardOne.position].visible = false
+							cardList.value[cardTwo.position].visible = false
+						}, 2000)
 					}
 
 
