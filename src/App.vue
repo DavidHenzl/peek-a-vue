@@ -2,7 +2,7 @@
 	<h1 class="sr-only">Peek-a-Vue</h1>
   <img src="/images/peek-a-vue-title.png"
 	alt="Peek-a-Vue" class="title">
-  <section class="game-board">
+  <transition-group tag="section" class="game-board">
 		<SingleCard
     v-for="(card, index) in cardList"
     :key="`card-${index}`"
@@ -12,7 +12,7 @@
 		:position="card.position"
 		@select-card="flipCard"
 		/>
-  </section>
+  </transition-group>
 	<h2>{{ status }}</h2>
 	<button @click="newGame" class="button">
 		<img src="/images/restart.svg" alt="Restart Icon"> Restart Game
@@ -21,6 +21,7 @@
 
 <script>
 import { computed, ref, watch, onMounted } from 'vue'
+import { launchConfetti } from './utilities/confetti'
 import SingleCard from './components/SingleCard'
 
 export default {
@@ -89,8 +90,12 @@ export default {
 				userSelection.value[0] = payload
 			}
 		}
-		
-		
+
+		watch(remainingPairs, currentValue => {
+			if (currentValue === 0) {
+				launchConfetti()
+			}
+		})
 
 		watch(
 			userSelection,
@@ -188,4 +193,5 @@ h1 {
 .title {
 	padding-bottom: 30px;
 }
+
 </style>
