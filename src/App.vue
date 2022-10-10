@@ -2,7 +2,7 @@
 	<h1 class="sr-only">Peek-a-Vue</h1>
   <img src="/images/peek-a-vue-title.png"
 	alt="Peek-a-Vue" class="title">
-  <transition-group tag="section" class="game-board">
+  <section tag="section" class="game-board">
 		<SingleCard
     v-for="(card, index) in cardList"
     :key="`card-${index}`"
@@ -12,9 +12,9 @@
 		:position="card.position"
 		@select-card="flipCard"
 		/>
-  </transition-group>
+  </section>
 	<h2>{{ status }}</h2>
-	<button @click="newGame" class="button">
+	<button @click="restartGame" class="button">
 		<img src="/images/restart.svg" alt="Restart Icon"> Restart Game
 	</button>
 </template>
@@ -62,7 +62,15 @@ export default {
 			'witch-hat'
 		]
 
-		const newGame = () => {
+		const restartGame = () => {
+			cardList.value.forEach(element => {
+				element.visible = false
+				setTimeout(newGame, 500)
+			})
+		}
+
+
+		const newGame = () => {	
 			cardList.value = ([])
 			let currentFaceValues = [...defaultFaceValues, ...defaultFaceValues]
 			for (let i = 0; i < 16; i++) {
@@ -126,7 +134,8 @@ export default {
 			flipCard,
 			userSelection,
 			status,
-			newGame
+			newGame,
+			restartGame
     }
   }
 }
@@ -158,12 +167,21 @@ h1 {
 .button {
 	background-color: orange;
 	color: white;
-	padding: 0.75rem 0.5rem;
+	padding: 0.75rem 1rem;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	margin: 0 auto;
 	font-weight: bold;
+	border-radius: 10px;
+}
+
+.button:hover {
+	cursor: pointer;
+}
+
+.button:active {
+	background-color: rgb(173, 113, 0);
 }
 
 .button img {
