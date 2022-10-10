@@ -1,8 +1,7 @@
 <template>
   <h1>Peek-a-Vue</h1>
-	<button @click="newGame">New Game</button>
   <section class="game-board">
-    <SingleCard
+		<SingleCard
     v-for="(card, index) in cardList"
     :key="`card-${index}`"
 		:matched="card.matched"
@@ -13,10 +12,11 @@
 		/>
   </section>
 	<h2>{{ status }}</h2>
+	<button @click="newGame">New Game</button>
 </template>
 
 <script>
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import SingleCard from './components/SingleCard'
 
 export default {
@@ -24,9 +24,14 @@ export default {
   components: {
     SingleCard
   },
-  setup() {
-    const cardList = ref([])
+	setup() {
+		const cardList = ref([])
 		const userSelection = ref([])
+
+		onMounted(() => {
+			newGame()
+		})
+		
 		const status = computed(() => {
 			if (remainingPairs.value === 0) {
 				return 'Player wins!'
@@ -34,6 +39,7 @@ export default {
 				return `Remaining Pairs: ${remainingPairs.value}`
 			}
 		})
+
 		const remainingPairs = computed(() => {
 			const remainingCards = cardList.value.filter(card => card.matched === false).length
 
@@ -67,6 +73,8 @@ export default {
 				userSelection.value[0] = payload
 			}
 		}
+		
+		
 
 		watch(
 			userSelection,
